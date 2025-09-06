@@ -51,6 +51,8 @@ This repository (Physicar DeepRacer for Cloud) is a cloud-based training platfor
 
 Configure language and timezone settings in [setup.ipynb](setup.ipynb).
 
+> When launching Jupyter Notebook, if prompted to select a kernel, choose `python 3.12.1 ~/.python/current/bin/python`. This applies in the same way to all of the instructions below.
+
 ### 01_start_training
 
 Start training your model in [**01_start_training.ipynb**](01_start_training.ipynb).  
