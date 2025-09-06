@@ -11,11 +11,16 @@
 
 🚧 **Currently in Beta Version** 🚧
 
+
 </div>
 
 ## 소개
 
 본 레포지토리(Physicar DeepRacer for Cloud)는 [(주)AI CASTLE](https://aicastle.com)에서 만든 [**PhysiCar AI**](https://physicar.ai) 서비스중 하나인 DeepRacer의 클라우드 기반 훈련 플랫폼입니다.
+
+### YouTube에서 영상 보기
+
+[![Watch on YouTube](https://img.shields.io/badge/YouTube-Video-red?logo=youtube)](https://www.youtube.com/watch?v=_Qt_-9gDK4o)
 
 ### PhysiCar AI란
 
