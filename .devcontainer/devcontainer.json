@@ -1,0 +1,87 @@
+{
+    "name": "Physicar DeepRacer for Cloud",
+    "image": "mcr.microsoft.com/devcontainers/universal:2",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/codespace/physicar-deepracer-for-cloud,type=bind,consistency=cached",
+    "workspaceFolder": "/home/codespace/physicar-deepracer-for-cloud",
+    // "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-20.04",
+    // "workspaceMount": "source=${localWorkspaceFolder},target=/home/vscode/physicar-deepracer-for-cloud,type=bind,consistency=cached",
+    // "workspaceFolder": "/home/vscode/physicar-deepracer-for-cloud",
+    "hostRequirements": {
+        "cpus": 4
+    },
+    "onCreateCommand": "bash .devcontainer/.physicar-deepracer-for-cloud/setup.sh",  // pre-build
+    "postStartCommand": "bash ~/.physicar-deepracer-for-cloud/entrypoint.sh",
+    // "postAttachCommand": "",
+
+    "customizations": {
+        "codespaces": {
+            "openFiles": [
+                "README.md"
+            ]
+        },
+        "vscode": {
+            "extensions": [
+                "GitHub.copilot",
+                "ms-toolsai.jupyter",
+                "ms-python.python"
+            ],
+            "settings": {
+                "markdown.preview.doubleClickToSwitchToEditor": false,
+                "workbench.editorAssociations": {
+                    "*.md": "vscode.markdown.preview.editor"
+                },
+                "explorer.compactFolders": false, // 탐색기에서 폴더를 압축하지 않음
+                "python.defaultInterpreterPath": "/usr/bin/python3",   // 컨테이너 기본 Python 인터프리터 경로
+                "jupyter.jupyterServerType": "local",                  // Jupyter 서버를 로컬(컨테이너 내부)에서 실행
+                "jupyter.notebook.defaultKernel": "Python 3"           // 노트북 실행 시 자동으로 선택할 커널 이름
+            }
+        }
+    },
+    // "overrideCommand": false,
+    "forwardPorts": [ 
+        // 5000, 
+        // 5900, 5901, 6080,
+        // 5910, 5911, 5912, 5913, 5914, 5915, 5916, 5917, 5918, 5919,
+        8080, 8081, 8082, 8083, 8084, 8085, 8086, 8087, 8088, 8089, 
+        9000, 9001
+    ],
+    "portsAttributes": {
+        "8080":{
+            "label": "worker-0"
+        },
+        "8081": {
+            "label": "worker-1"
+        },
+        "8082": {
+            "label": "worker-2"
+        },
+        "8083": {
+            "label": "worker-3"
+        },
+        "8084": {
+            "label": "worker-4"
+        },
+        "8085": {
+            "label": "worker-5"
+        },
+        "8086": {
+            "label": "worker-6"
+        },
+        "8087": {
+            "label": "worker-7"
+        },
+        "8088": {
+            "label": "worker-8"
+        },
+        "8089": {
+            "label": "worker-9"
+        },
+        "9000": {
+            "label": "minio-api"
+        },
+        "9001": {
+            "label": "minio-console"
+        }
+    }
+
+}

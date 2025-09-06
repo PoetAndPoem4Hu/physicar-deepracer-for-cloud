@@ -1,0 +1,64 @@
+system:
+  version: "5"
+  enable_main_camera: true  # DR_CAMERA_MAIN_ENABLE
+  enable_sub_camera: false  # DR_CAMERA_SUB_ENABLE
+  enable_kvs_camera: true  # DR_CAMERA_KVS_ENABLE
+  train_multi_config: true  # DR_TRAIN_MULTI_CONFIG
+  enable_gui: false  # DR_HOST_X=True, DR_GUI_ENABLE=True 
+
+simulation:
+  main: 
+    car_color: Black
+    object_avoidance:
+      min_distance_between_objects: 2
+  sub1: 
+    car_color: Grey
+    object_avoidance:
+      min_distance_between_objects: 2
+  sub2: 
+    car_color: Blue
+    object_avoidance:
+      min_distance_between_objects: 2
+  sub3: 
+    car_color: Red
+    object_avoidance:
+      min_distance_between_objects: 2
+  sub4: 
+    car_color: Orange
+    object_avoidance:
+      min_distance_between_objects: 2
+  sub5: 
+    car_color: White
+    object_avoidance:
+      min_distance_between_objects: 2
+  sub6: 
+    car_color: Purple
+    object_avoidance:
+      min_distance_between_objects: 2
+
+training:
+  algorithm: PPO   # PPO or SAC
+  round_robin_advanced: 0.1 # DR_TRAIN_ROUND_ROBIN_ADVANCE_DIST
+  min_evaluation_number_of_trials: 3  # 최소 평가 횟수 DR_EVAL_NUMBER_OF_TRIALS
+  hyperparameters:
+    sac_alpha: 0.2
+    epsilon_steps: 10000
+    stack_size: 1
+    term_cond_avg_score: 100000.0
+    term_cond_max_episodes: 100000
+
+test:
+  max_resets: 30
+  is_continuous: true
+  save_mp4: true  # DR_EVAL_SAVE_MP4
+  crash_reset_behind_dist: -0.5  # DR_EVAL_RESET_BEHIND_DIST
+
+
+vehicle:
+  sensor:
+    camera: 1  # 1 or 2
+    preprocess_type: grey_scale   # GREY_SCALE or RGB
+  neural_network: 3-layer-cnn   # DEEP_CONVOLUTIONAL_NETWORK_SHALLOW or DEEP_CONVOLUTIONAL_NETWORK
+
+
+auto_test_after_training: false
