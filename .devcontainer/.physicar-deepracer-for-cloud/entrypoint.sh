@@ -58,24 +58,25 @@ do
       -o use_path_request_style
     then
       mkdir -p ~/.physicar-deepracer-for-cloud/bucket/models
-      break
     fi
   else
     mkdir -p ~/.physicar-deepracer-for-cloud/bucket/models
-    break
   fi
-
-  sleep 3
+  sleep 5
 done
 '
 
-# ####### minio anonymous access setup
-# tmux new-session -d -s minio-setup bash -lc '
-# cd ~/.physicar-deepracer-for-cloud
-# if [ -f setup_minio_anonymous.py ]; then
-#   python setup_minio_anonymous.py
-# fi
-# '
+####### minio anonymous access setup
+tmux new-session -d -s minio-setup bash -lc '
+echo "⏱️  MinIO 익명 접근 설정을 위해 대기 중..."
+sleep 30  # MinIO가 완전히 시작될 때까지 대기
+cd ~/.physicar-deepracer-for-cloud
+if [ -f setup_minio_anonymous.py ]; then
+  python setup_minio_anonymous.py
+else
+  echo "❌ setup_minio_anonymous.py 파일을 찾을 수 없습니다."
+fi
+'
 
 ###### ports public <-> private (Only Codespaces)
 if [[ -n "${CODESPACES:-}" ]]; then
@@ -138,22 +139,22 @@ SWAPFILE=\"/tmp/swapfile\"
 mem_kb=\$(awk '/^MemTotal:/ {print \$2}' /proc/meminfo)
 mem_gib=\$(( mem_kb / (1024*1024) ))
 
-# 32GiB 초과면 스왑 생성 안 함
-if (( mem_gib > 32 )); then
-  echo \"[swap] Mem=\${mem_gib}GiB > 32GiB -> do nothing\"
+# 64GiB 초과면 스왑 생성 안 함
+if (( mem_gib > 64 )); then
+  echo \"[swap] Mem=\${mem_gib}GiB > 64GiB -> do nothing\"
   exit 0
 fi
 
-# 목표 총 메모리: min(4 * mem_gib, 32)
+# 목표 총 메모리: min(4 * mem_gib, 64)
 target_total_gib=\$(( mem_gib * 4 ))
-if (( target_total_gib > 32 )); then
-  target_total_gib=32
+if (( target_total_gib > 64 )); then
+  target_total_gib=64
 fi
 
-# 필요한 스왑: target_total - mem (하한 0, 상한 16)
+# 필요한 스왑: target_total - mem (하한 0, 상한 32)
 desired_swap_gib=\$(( target_total_gib - mem_gib ))
 if (( desired_swap_gib < 0 )); then desired_swap_gib=0; fi
-if (( desired_swap_gib > 16 )); then desired_swap_gib=16; fi
+if (( desired_swap_gib > 32 )); then desired_swap_gib=32; fi
 desired_swap_bytes=\$(( desired_swap_gib * 1024 * 1024 * 1024 ))
 
 # 현재 /tmp/swapfile가 올라가 있으면 사이즈 확인 (헤더 제거)
