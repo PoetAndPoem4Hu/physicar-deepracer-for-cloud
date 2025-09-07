@@ -20,7 +20,7 @@
 
 ### YouTube에서 영상 보기
 
-[![Watch on YouTube](https://img.shields.io/badge/YouTube-Video-red?logo=youtube)](https://www.youtube.com/watch?v=_Qt_-9gDK4o)
+[![Watch on YouTube](https://img.shields.io/badge/YouTube-Video-red?logo=youtube)](https://www.youtube.com/watch?v=JbIcrCUvdNA)
 
 ### PhysiCar AI란
 
