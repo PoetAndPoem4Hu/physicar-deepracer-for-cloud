@@ -14,11 +14,6 @@
     // "postAttachCommand": "",
 
     "customizations": {
-        "codespaces": {
-            "openFiles": [
-                "README.md"
-            ]
-        },
         "vscode": {
             "extensions": [
                 "GitHub.copilot",
@@ -85,3 +80,4 @@
     }
 
 }
+
