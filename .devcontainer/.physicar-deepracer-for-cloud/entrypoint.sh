@@ -2,18 +2,17 @@
 
 ###### upgrade physicar (current major version only)
 tmux new-session -d -s upgrade bash -lc '
-current_version=$(pip show physicar 2>/dev/null | grep "Version:" | cut -d" " -f2 || echo "0.0.0")
+cd ~/physicar-deepracer-for-cloud
+current_version=$(uv pip show physicar 2>/dev/null | grep "Version:" | cut -d" " -f2 || echo "0.0.0")
 major_version=$(echo $current_version | cut -d"." -f1)
-pip install --upgrade "physicar~=${major_version}.0"
+uv pip install --upgrade "physicar~=${major_version}.0"
 '
 
-
-
 ####### system - physicar
-cd ~/physicar-deepracer-for-cloud
 tmux new-session -d -s system bash -lc '
+cd ~/physicar-deepracer-for-cloud
 while true; do
-  python -m physicar.deepracer.cloud.system
+  uv run -m physicar.deepracer.cloud.system
   echo "💥  app crashed. Fix code & save to auto-restart."
   sleep 2
 done
@@ -70,9 +69,9 @@ done
 tmux new-session -d -s minio-setup bash -lc '
 echo "⏱️  MinIO 익명 접근 설정을 위해 대기 중..."
 sleep 30  # MinIO가 완전히 시작될 때까지 대기
-cd ~/.physicar-deepracer-for-cloud
+cd ~/physicar-deepracer-for-cloud
 if [ -f setup_minio_anonymous.py ]; then
-  python setup_minio_anonymous.py
+  uv run ~/.physicar-deepracer-for-cloud/setup_minio_anonymous.py
 else
   echo "❌ setup_minio_anonymous.py 파일을 찾을 수 없습니다."
 fi

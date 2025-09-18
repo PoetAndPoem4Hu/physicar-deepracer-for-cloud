@@ -1,9 +1,19 @@
 #!/bin/bash
 
+# cd ~
+# git clone https://github.com/physicar/physicar-deepracer-for-cloud
+# cd ~/physicar-deepracer-for-cloud
+
 ### drfc
 sudo apt-get update
-sudo apt-get install -y jq awscli python3-boto3 docker-compose tmux ffmpeg
-pip install boto3 python-dotenv pyyaml polib ipywidgets physicar
+sudo apt-get install -y jq awscli python3-boto3 python3-pip docker-compose tmux ffmpeg matplotlib
+
+# uv install
+curl -LsSf https://astral.sh/uv/install.sh | sh
+cd ~/physicar-deepracer-for-cloud
+uv sync
+# uv init
+# uv add boto3 python-dotenv pyyaml polib ipywidgets jupyterlab ipykernel physicar pillow
 
 mkdir -p ~/.physicar-deepracer-for-cloud
 cd ~/.physicar-deepracer-for-cloud
@@ -38,7 +48,8 @@ aws_access_key_id = deepracer
 aws_secret_access_key = deepracer
 EOF
 source ~/.physicar-deepracer-for-cloud/deepracer-for-cloud/bin/activate.sh --minio
-python ~/.physicar-deepracer-for-cloud/setup_minio_anonymous.py
+cd ~/physicar-deepracer-for-cloud
+uv run ~/.physicar-deepracer-for-cloud/setup_minio_anonymous.py
 
 ### mount
 sudo apt-get update
@@ -68,3 +79,41 @@ export DISPLAY=:99
 # fi
 
 EOF
+
+
+############ 도커 컨테이너 환경(ex 코드스페이스)가 아니면 실행 (systemd 서비스 등록)
+if [ -f /.dockerenv ] || [ -f /run/.containerenv ] \
+  || grep -qaE '(docker|containerd|podman|lxc|kubepods|libpod)' /proc/1/cgroup \
+  || (command -v systemd-detect-virt >/dev/null 2>&1 && systemd-detect-virt --container >/dev/null 2>&1); then
+  :
+elif command -v systemctl >/dev/null 2>&1 && [ -d /run/systemd/system ]; then
+  USERNAME=${SUDO_USER:-$(id -un)}
+  HOMEDIR=$(getent passwd "$USERNAME" | cut -d: -f6)
+
+  sudo chmod +x "$HOMEDIR/.physicar-deepracer-for-cloud/entrypoint.sh"
+
+  sudo tee /etc/systemd/system/physicar-entrypoint@.service >/dev/null <<'UNIT'
+[Unit]
+Description=Run physicar deepracer entrypoint at boot (oneshot) for %i
+Wants=network-online.target
+After=network-online.target docker.service
+RequiresMountsFor=%h
+
+[Service]
+Type=oneshot
+User=%i
+WorkingDirectory=%h
+Environment=HOME=%h
+ExecStart=/usr/bin/bash -lc '%h/.physicar-deepracer-for-cloud/entrypoint.sh'
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+  sudo systemctl daemon-reload
+  sudo systemctl enable --now "physicar-entrypoint@${USERNAME}.service"
+fi
+
+
+

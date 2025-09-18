@@ -26,9 +26,8 @@
                     "*.md": "vscode.markdown.preview.editor"
                 },
                 "explorer.compactFolders": false, // 탐색기에서 폴더를 압축하지 않음
-                "python.defaultInterpreterPath": "/usr/bin/python3",   // 컨테이너 기본 Python 인터프리터 경로
-                "jupyter.jupyterServerType": "local",                  // Jupyter 서버를 로컬(컨테이너 내부)에서 실행
-                "jupyter.notebook.defaultKernel": "Python 3"           // 노트북 실행 시 자동으로 선택할 커널 이름
+                "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+                "jupyter.jupyterServerType": "local"
             }
         }
     },
