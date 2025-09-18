@@ -59,7 +59,7 @@
 
 [setup.ipynb](setup.ipynb)에서 언어 및 시간대 설정을 합니다.
 
-> 주피터 노트북 실행시 커널 선택이 뜨면 `python 3.12.1 ~/.python/current/bin/python`를 선택합니다. 이것은 아래 내용에도 모두 동일하게 적용됩니다.
+> 주피터 노트북 실행시 커널 선택이 뜨면 `physicar-deepracer-for-cloud (Python 3.12.1)`를 선택합니다. 이것은 아래 내용에도 모두 동일하게 적용됩니다.
 
 ### 01_start_training
 [**01_start_training.ipynb**](01_start_training.ipynb)에서 모델 훈련을 시작합니다.
