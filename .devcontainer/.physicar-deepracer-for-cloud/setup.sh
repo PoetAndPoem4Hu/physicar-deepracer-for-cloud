@@ -6,7 +6,7 @@
 
 ### drfc
 sudo apt-get update
-sudo apt-get install -y jq awscli python3-boto3 python3-pip docker-compose tmux ffmpeg matplotlib
+sudo apt-get install -y jq awscli python3-boto3 python3-pip docker-compose tmux ffmpeg
 
 # uv install
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -20,6 +20,8 @@ cd ~/.physicar-deepracer-for-cloud
 git clone --branch v5.3.3 --depth 1 --single-branch \
   https://github.com/aws-deepracer-community/deepracer-for-cloud.git
 cd deepracer-for-cloud
+./bin/prepare.sh || true
+newgrp docker
 bin/init.sh -c local -a cpu -s compose
 
 
