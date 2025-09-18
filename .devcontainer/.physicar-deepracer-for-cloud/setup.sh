@@ -20,17 +20,6 @@ cd ~/.physicar-deepracer-for-cloud
 git clone --branch v5.3.3 --depth 1 --single-branch \
   https://github.com/aws-deepracer-community/deepracer-for-cloud.git
 cd deepracer-for-cloud
-
-# 도커 컨테이너 환경이 아닌 경우에만 prepare.sh 실행
-if [ -f /.dockerenv ] || [ -f /run/.containerenv ] \
-  || grep -qaE '(docker|containerd|podman|lxc|kubepods|libpod)' /proc/1/cgroup \
-  || (command -v systemd-detect-virt >/dev/null 2>&1 && systemd-detect-virt --container >/dev/null 2>&1); then
-  echo "Docker container environment detected, skipping prepare.sh"
-else
-  ./bin/prepare.sh || true
-fi
-
-newgrp docker
 bin/init.sh -c local -a cpu -s compose
 
 
