@@ -54,7 +54,8 @@ do
     if s3fs bucket ~/.physicar-deepracer-for-cloud/bucket \
       -o passwd_file=~/.s3fs/credentials \
       -o url=http://localhost:9000 \
-      -o use_path_request_style
+      -o use_path_request_style \
+      -o uid=1000 -o gid=1000 -o umask=077
     then
       mkdir -p ~/.physicar-deepracer-for-cloud/bucket/models
     fi

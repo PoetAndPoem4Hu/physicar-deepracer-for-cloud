@@ -10,16 +10,20 @@ sudo apt-get install -y jq awscli python3-boto3 python3-pip docker-compose tmux 
 
 # uv install
 curl -LsSf https://astral.sh/uv/install.sh | sh
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
 cd ~/physicar-deepracer-for-cloud
 uv sync
-# uv init
-# uv add boto3 python-dotenv pyyaml polib ipywidgets jupyterlab ipykernel physicar pillow
 
+# deepracer-for-cloud
 mkdir -p ~/.physicar-deepracer-for-cloud
 cd ~/.physicar-deepracer-for-cloud
 git clone --branch v5.3.3 --depth 1 --single-branch \
   https://github.com/aws-deepracer-community/deepracer-for-cloud.git
 cd deepracer-for-cloud
+# ./bin/prepare.sh
+# sudo usermod -aG docker $USER
+# newgrp docker
 bin/init.sh -c local -a cpu -s compose
 
 
@@ -29,7 +33,6 @@ rm -rf ~/physicar-deepracer-for-cloud/.devcontainer
 
 
 ### env setup
-# sed -i 's/^DR_DOCKER_STYLE=.*$/DR_DOCKER_STYLE=compose/' ~/.physicar-deepracer-for-cloud/deepracer-for-cloud/system.env
 sed -i 's/^DR_UPLOAD_S3_PROFILE=.*$/DR_UPLOAD_S3_PROFILE=minio/' ~/.physicar-deepracer-for-cloud/deepracer-for-cloud/system.env
 sed -i 's/^DR_UPLOAD_S3_BUCKET=.*$/DR_UPLOAD_S3_BUCKET=bucket/' ~/.physicar-deepracer-for-cloud/deepracer-for-cloud/system.env
 sed -i 's/^DR_LOCAL_S3_BUCKET=.*$/DR_LOCAL_S3_BUCKET=bucket/' ~/.physicar-deepracer-for-cloud/deepracer-for-cloud/system.env
@@ -81,39 +84,38 @@ export DISPLAY=:99
 EOF
 
 
-############ 도커 컨테이너 환경(ex 코드스페이스)가 아니면 실행 (systemd 서비스 등록)
-if [ -f /.dockerenv ] || [ -f /run/.containerenv ] \
-  || grep -qaE '(docker|containerd|podman|lxc|kubepods|libpod)' /proc/1/cgroup \
-  || (command -v systemd-detect-virt >/dev/null 2>&1 && systemd-detect-virt --container >/dev/null 2>&1); then
-  :
-elif command -v systemctl >/dev/null 2>&1 && [ -d /run/systemd/system ]; then
-  USERNAME=${SUDO_USER:-$(id -un)}
-  HOMEDIR=$(getent passwd "$USERNAME" | cut -d: -f6)
+# ############ 도커 컨테이너 환경(ex 코드스페이스)가 아니면 실행 (systemd 서비스 등록)
+# if [ -f /.dockerenv ] || [ -f /run/.containerenv ] \
+#   || grep -qaE '(docker|containerd|podman|lxc|kubepods|libpod)' /proc/1/cgroup \
+#   || (command -v systemd-detect-virt >/dev/null 2>&1 && systemd-detect-virt --container >/dev/null 2>&1); then
+#   :
+# elif command -v systemctl >/dev/null 2>&1 && [ -d /run/systemd/system ]; then
+#   USERNAME=${SUDO_USER:-$(id -un)}
+#   HOMEDIR=$(getent passwd "$USERNAME" | cut -d: -f6)
 
-  sudo chmod +x "$HOMEDIR/.physicar-deepracer-for-cloud/entrypoint.sh"
+#   sudo chmod +x "$HOMEDIR/.physicar-deepracer-for-cloud/entrypoint.sh"
 
-  sudo tee /etc/systemd/system/physicar-entrypoint@.service >/dev/null <<'UNIT'
-[Unit]
-Description=Run physicar deepracer entrypoint at boot (oneshot) for %i
-Wants=network-online.target
-After=network-online.target docker.service
-RequiresMountsFor=%h
+#   sudo tee /etc/systemd/system/physicar-entrypoint@.service >/dev/null <<'UNIT'
+# [Unit]
+# Description=Run physicar deepracer entrypoint in tmux for %i
+# After=network.target docker.service
 
-[Service]
-Type=oneshot
-User=%i
-WorkingDirectory=%h
-Environment=HOME=%h
-ExecStart=/usr/bin/bash -lc '%h/.physicar-deepracer-for-cloud/entrypoint.sh'
-RemainAfterExit=no
+# [Service]
+# Type=simple
+# User=%i
+# WorkingDirectory=/home/%i
+# Environment=HOME=/home/%i
+# ExecStart=/usr/bin/tmux new-session -d -s physicar-entrypoint "/home/%i/.physicar-deepracer-for-cloud/entrypoint.sh"
+# RemainAfterExit=yes
+# Restart=on-failure
 
-[Install]
-WantedBy=multi-user.target
-UNIT
+# [Install]
+# WantedBy=multi-user.target
+# UNIT
 
-  sudo systemctl daemon-reload
-  sudo systemctl enable --now "physicar-entrypoint@${USERNAME}.service"
-fi
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now "physicar-entrypoint@${USERNAME}.service"
+# fi
 
 
 
