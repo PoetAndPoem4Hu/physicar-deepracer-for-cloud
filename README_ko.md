@@ -46,14 +46,48 @@
 - **다국어 지원**: 여러 언어와 시간대 설정 지원
 
 
-## 빠른 시작
+## 시작하기
 
-### GitHub Codespaces에서 시작하기
+### GitHub Codespaces (빠른 시작)
 
 1. 이 레포지토리에서 **Code** 버튼 클릭
 2. **Codespaces** 탭 선택
 3. **Create codespace** 클릭
 4. 환경이 자동으로 설정될 때까지 대기
+
+### AWS EC2
+
+1. EC2 인스턴스 생성
+    - IMAGE: `ami-0f8d552e06067b477` 또는 `ami-07d692f3193fa6145`를 검색하여 나오는 ubuntu-focal-20.04 커뮤니티 AMI를 선택
+    - 인스턴스 유형: `c5.2xlarge`, `c5.4xlarge` 중 선택
+        - 동시 훈련 가능한 시뮬레이션 수
+            - c5.2xlarge: 1개 (서브 0개)
+            - c5.4xlarge: 3개 (서브 2개)
+    - 보안그룹 포트
+        - ssh: 22
+        - VNC: 5900-5901
+        - 시뮬레이션 뷰어: 8080-8089
+        - jupyterlab: 8888
+        - noVNC: 6080
+        - minio 버킷: 9000-9001
+    - 스토리지: 40GB 이상
+
+1. 연결: 인스턴스 선택 -> 연결 -> EC 인스턴스 연결
+
+1. 설치 명령어
+    ```bash
+    cd ~
+    git clone https://github.com/physicar/physicar-deepracer-for-cloud.git
+    cd physicar-deepracer-for-cloud
+    source .devcontainer/.physicar-deepracer-for-cloud/setup.ec2.sh
+    ```
+    
+1. 접속
+    - 접속 링크: `http://IP주소:8888`
+    - 비번: 인스턴스 ID
+
+
+## 파일 설명
 
 ### setup.ipynb
 
@@ -64,8 +98,6 @@
 ### 01_start_training
 [**01_start_training.ipynb**](01_start_training.ipynb)에서 모델 훈련을 시작합니다.
 보상함수는 [reward_function.py](reward_function.py)에서 작성합니다.
-
-
 
 ### 02_your_models
 [**02_your_models.ipynb**](02_your_models.ipynb) 에서 훈련중인 또는 훈련이 끝난 모델을 확인 합니다.
