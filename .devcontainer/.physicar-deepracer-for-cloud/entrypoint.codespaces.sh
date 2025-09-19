@@ -3,9 +3,12 @@
 ###### upgrade physicar (current major version only)
 tmux new-session -d -s upgrade bash -lc '
 cd ~/physicar-deepracer-for-cloud
-current_version=$(uv pip show physicar 2>/dev/null | grep "Version:" | cut -d" " -f2 || echo "0.0.0")
-major_version=$(echo $current_version | cut -d"." -f1)
-uv pip install --upgrade "physicar~=${major_version}.0"
+while true; do
+  current_version=$(uv pip show physicar 2>/dev/null | grep "Version:" | cut -d" " -f2 || echo "0.0.0")
+  major_version=$(echo $current_version | cut -d"." -f1)
+  uv pip install --upgrade "physicar~=${major_version}.0"
+  sleep 5
+done
 '
 
 ####### system - physicar

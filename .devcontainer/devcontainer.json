@@ -9,8 +9,8 @@
     "hostRequirements": {
         "cpus": 4
     },
-    "onCreateCommand": "bash .devcontainer/.physicar-deepracer-for-cloud/setup.sh",  // pre-build
-    "postStartCommand": "bash ~/.physicar-deepracer-for-cloud/entrypoint.sh",
+    "onCreateCommand": "bash .devcontainer/.physicar-deepracer-for-cloud/setup.codespaces.sh",  // pre-build
+    "postStartCommand": "bash ~/.physicar-deepracer-for-cloud/entrypoint.codespaces.sh",
     // "postAttachCommand": "",
 
     "customizations": {
