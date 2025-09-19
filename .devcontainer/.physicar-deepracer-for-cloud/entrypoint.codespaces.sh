@@ -82,54 +82,78 @@ fi
 '
 
 ###### ports public <-> private (Only Codespaces)
-if [[ -n "${CODESPACES:-}" ]]; then
-  tmux new-session -d -s ports bash -lc "while true; do
-    echo \"Check ports at \$(date)\"
-    gh codespace ports --json sourcePort,visibility -c \"${CODESPACE_NAME}\" > /tmp/cs_ports.json || { echo \"cannot list ports\"; sleep 2; continue; }
+tmux new-session -d -s ports bash -lc "while true; do
+echo \"Check ports at \$(date)\"
 
-    TO_PUBLIC=()
-    TO_PRIVATE=()
+gh codespace ports --json sourcePort,visibility,browseUrl -c \"${CODESPACE_NAME}\" > /tmp/cs_ports.json || { echo \"cannot list ports\"; sleep 2; continue; }
 
-    for P in 8080 8081 8082 8083 8084 8085 8086 8087 8088 8089 9000; do
-      VIS=\$(jq -r --arg p \"\$P\" \".[] | select(.sourcePort==(\\\$p|tonumber)) | .visibility\" /tmp/cs_ports.json)
+TO_PUBLIC=()
+TO_PRIVATE=()
 
-      if [[ -z \"\$VIS\" || \"\$VIS\" == \"null\" ]]; then
-        echo \"skip \$P (not forwarded)\"
-        continue
-      fi
+for P in 8080 8081 8082 8083 8084 8085 8086 8087 8088 8089 9000; do
+  VIS=\$(jq -r \".[] | select(.sourcePort==\$P) | .visibility\" /tmp/cs_ports.json)
+  BROWSE_URL=\$(jq -r \".[] | select(.sourcePort==\$P) | .browseUrl // \\\"null\\\"\" /tmp/cs_ports.json)
+  
+  if [[ -z \"\$VIS\" || \"\$VIS\" == \"null\" ]]; then
+    continue
+  fi
 
-      if ss -lnt \"( sport = :\$P )\" | grep -q \":\$P\"; then
-        if [[ \"\$VIS\" != \"public\" ]]; then
-          TO_PUBLIC+=(\"\$P:public\")
+  if ss -lnt \"( sport = :\$P )\" | grep -q \":\$P\"; then
+    if [[ \"\$VIS\" != \"public\" ]]; then
+      TO_PUBLIC+=(\"\$P:public\")
+    else
+      echo \"checking \$P (already public)\"
+      
+      if [[ -n \"\$BROWSE_URL\" && \"\$BROWSE_URL\" != \"null\" ]]; then
+        if timeout 15 curl -sI \"\$BROWSE_URL\" >/dev/null 2>&1; then
+          echo \"OK \$P public and accessible\"
         else
-          echo \"OK \$P already public\"
+          echo \"⚠️  \$P public but not accessible, refreshing...\"
+          TO_PRIVATE+=(\"\$P:private\")
         fi
       else
-        if [[ \"\$VIS\" != \"private\" ]]; then
-          TO_PRIVATE+=(\"\$P:private\")
-        else
-          echo \"OK \$P already private\"
-        fi
+        echo \"⚠️  \$P public but no URL found\"
       fi
-    done
-
-    if (( \${#TO_PUBLIC[@]} )); then
-      echo \"setting → public: \${TO_PUBLIC[*]}\"
-      gh codespace ports visibility \"\${TO_PUBLIC[@]}\" -c \"${CODESPACE_NAME}\" || echo \"error: public change failed\"
     fi
-
-    if (( \${#TO_PRIVATE[@]} )); then
-      echo \"setting → private: \${TO_PRIVATE[*]}\"
-      gh codespace ports visibility \"\${TO_PRIVATE[@]}\" -c \"${CODESPACE_NAME}\" || echo \"error: private change failed\"
+  else
+    if [[ \"\$VIS\" != \"private\" ]]; then
+      TO_PRIVATE+=(\"\$P:private\")
+    else
+      echo \"OK \$P already private\"
     fi
+  fi
+done
 
-    if (( ! \${#TO_PUBLIC[@]} && ! \${#TO_PRIVATE[@]} )); then
-      echo \"all good (no changes)\"
+if (( \${#TO_PRIVATE[@]} )); then
+  echo \"setting → private: \${TO_PRIVATE[*]}\"
+  gh codespace ports visibility \"\${TO_PRIVATE[@]}\" -c \"${CODESPACE_NAME}\" || echo \"error: private change failed\"
+  sleep 5 
+  
+  REFRESH_TO_PUBLIC=()
+  for ITEM in \"\${TO_PRIVATE[@]}\"; do
+    PORT_NUM=\${ITEM%:*}
+    if ss -lnt \"( sport = :\$PORT_NUM )\" | grep -q \":\$PORT_NUM\"; then
+      REFRESH_TO_PUBLIC+=(\"\$PORT_NUM:public\")
     fi
-
-    sleep 30
-  done"
+  done
+  
+  if (( \${#REFRESH_TO_PUBLIC[@]} )); then
+    echo \"refreshing → public: \${REFRESH_TO_PUBLIC[*]}\"
+    gh codespace ports visibility \"\${REFRESH_TO_PUBLIC[@]}\" -c \"${CODESPACE_NAME}\" || echo \"error: refresh to public failed\"
+  fi
 fi
+
+if (( \${#TO_PUBLIC[@]} )); then
+  echo \"setting → public: \${TO_PUBLIC[*]}\"
+  gh codespace ports visibility \"\${TO_PUBLIC[@]}\" -c \"${CODESPACE_NAME}\" || echo \"error: public change failed\"
+fi
+
+if (( ! \${#TO_PUBLIC[@]} && ! \${#TO_PRIVATE[@]} )); then
+  echo \"all good (no changes)\"
+fi
+
+sleep 30
+done"
 
 ####### swap memory (Only Codespaces)
 if [[ -n "${CODESPACES:-}" ]]; then

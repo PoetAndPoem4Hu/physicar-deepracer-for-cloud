@@ -64,15 +64,30 @@ touch ~/.Xauthority
 cat << 'EOF' >> ~/.bashrc
 
 export DISPLAY=:99
-# source ~/.physicar-deepracer-for-cloud/deepracer-for-cloud/bin/activate.sh >/dev/null 2>&1 
-# if [ "$CODESPACES" = "true" ]; then
-#   (   
-#     while true; do
-#       sleep 240
-#       echo "[Codespace keep-alive] $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-#     done
-#   ) &
-# fi
+
+(   
+while true; do
+sleep 240
+echo "[Codespace keep-alive] $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+done
+) &
+
+(
+while true; do
+    if gh codespace ports --json sourcePort,visibility -c "${CODESPACE_NAME}" > /tmp/port_check.json 2>/dev/null; then
+        for P in 6080 8080 8081 8082 8083 8084 8085 8086 8087 8088 8089 9000 9001; do
+            if ss -lnt "( sport = :$P )" | grep -q ":$P"; then
+                VIS=$(jq -r --arg p "$P" '.[] | select(.sourcePort==($p|tonumber)) | .visibility' /tmp/port_check.json 2>/dev/null)
+                if [[ -z "$VIS" || "$VIS" == "null" ]]; then
+                    echo "Port Forwarding: localhost:$P ($(date '+%H:%M:%S'))"
+                fi
+            fi
+        done
+    fi
+    sleep 10
+done
+) &
+
 
 EOF
 
