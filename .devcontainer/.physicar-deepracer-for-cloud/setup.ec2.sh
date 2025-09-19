@@ -41,11 +41,10 @@ sed -i 's/^DR_UPLOAD_S3_PREFIX=.*$/DR_UPLOAD_S3_PREFIX=$DR_LOCAL_S3_MODEL_PREFIX
 
 
 ######## bucket (minio)
-INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 cat <<EOF > ~/.aws/credentials
 [minio]
 aws_access_key_id = deepracer
-aws_secret_access_key = $INSTANCE_ID
+aws_secret_access_key = deepracer
 EOF
 source ~/.physicar-deepracer-for-cloud/deepracer-for-cloud/bin/activate.sh --minio
 cd ~/physicar-deepracer-for-cloud
